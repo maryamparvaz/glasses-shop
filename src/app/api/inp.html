@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+</head>
+<body>
+        <input type="text" name="" id="img" placeholder="img">
+        <input type="text" name="" id="name1" placeholder="name1">
+        <input type="text" name="" id="name2" placeholder="name2">
+        <input type="text" name="" id="num" placeholder="num">
+        <input type="text" name="" id="price" placeholder="price">
+        <button>click</button>
+</body>
+<script>
+        let img = document.getElementById('img')
+        let name1 = document.getElementById('name1')
+        let name2 = document.getElementById('name2')
+        let num = document.getElementById('num')
+        let price = document.getElementById('price')
+        document.getElementsByTagName('button')[0].addEventListener('click' , () =>{
+                const newTask = {
+                        img : img.value ,
+                        name1 : name1.value ,
+                        name2 : name2.value ,
+                        num : num.value ,
+                        price : price.value 
+                };
+
+                fetch('https://65be4b4adcfcce42a6f22ed4.mockapi.io/pro', {
+                        method: 'POST',
+                        headers: { 'content-type': 'application/json' },
+                        // Send your data in the request body as JSON
+                        body: JSON.stringify(newTask)
+                }).then(res => {
+                        if (res.ok) {
+                                return res.json();
+                        }
+                        // handle error
+                }).then(task => {
+                        // do something with the new task
+                        alert('ok')
+                }).catch(error => {
+                        // handle error
+                        alert('no')
+                })
+        })
+</script>
+</html>
