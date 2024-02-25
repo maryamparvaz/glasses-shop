@@ -9,7 +9,6 @@ export default function catalog2() {
         const [data, setData] = useState();
         const { perpage, updateUser, updateUser4, updateUser5, updateUser6, updateUser7, updateUser8 } = useStore();
         const pag = useStore((state) => state.pagi)
-        // console.log(ser);
         const w = useRef()
         const ser = useStore((state) => state.search)
         const f = useRef()
@@ -19,8 +18,6 @@ export default function catalog2() {
                 const url = new URL('https://65be4b4adcfcce42a6f22ed4.mockapi.io/pro');
                 url.searchParams.append('page', pag);
                 url.searchParams.append('limit', vals);
-                // url.searchParams.append('name1', ser);
-                // setVals(10)
                 fetch(url, {
                         method: 'GET',
                         headers: { 'content-type': 'application/json' },
@@ -62,43 +59,42 @@ export default function catalog2() {
         const [glasess, setGlasess] = useState([])
         const [glasess2, setGlasess2] = useState([])
         function openmini(e) {
-                // sel++
-                // console.log(sel);
-                // updateUser8(sel)
                 f.current.style.display = 'block'
                 updateUser5(e.target.parentElement.parentElement.children[0].getAttribute('data-sr'), e.target.parentElement.parentElement.children[1].innerText)
                 glasess.push(e.target.getAttribute('data-id'))
                 setGlasess2(...glasess)
                 updateUser6(glasess)
-                const newItem ={
+                const newItem = {
                         img: e.target.parentElement.parentElement.children[0].getAttribute('data-sr'),
                         name: e.target.parentElement.parentElement.children[1].innerText,
                         name2: e.target.parentElement.previousElementSibling.innerText,
                         price: e.target.parentElement.getAttribute('data-price'),
                         id: e.target.getAttribute('data-id'),
                 }
-                if (newItem.img != undefined) {
-                        let flag = 0
-                        let myLocal = localStorage.getItem('myProducts2')
-                        let db = []
-                        if (myLocal != null) {
-                                let localStorageContent = JSON.parse(localStorage.getItem('myProducts2'))
-                                localStorageContent.map((val) => {
-                                        db.push(val)
-                                })
-                                db.map((v) => {
-                                        if (v.id == newItem.id) {
-                                                flag++
+                if (typeof window !== 'undefined') {
+                        if (newItem.img != undefined) {
+                                let flag = 0
+                                let myLocal = localStorage.getItem('myProducts2')
+                                let db = []
+                                if (myLocal != null) {
+                                        let localStorageContent = JSON.parse(localStorage.getItem('myProducts2'))
+                                        localStorageContent.map((val) => {
+                                                db.push(val)
+                                        })
+                                        db.map((v) => {
+                                                if (v.id == newItem.id) {
+                                                        flag++
+                                                }
+                                        })
+                                        if (flag == 0) {
+                                                db.push(newItem)
                                         }
-                                })
-                                if (flag == 0) {
-                                        db.push(newItem)
-                                }
-                                localStorage.setItem('myProducts2', JSON.stringify(db))
+                                        localStorage.setItem('myProducts2', JSON.stringify(db))
 
-                        } else {
-                                db.push(newItem)
-                                localStorage.setItem('myProducts2', JSON.stringify(db))
+                                } else {
+                                        db.push(newItem)
+                                        localStorage.setItem('myProducts2', JSON.stringify(db))
+                                }
                         }
                 }
         }
@@ -183,7 +179,7 @@ function Pagination() {
                         c.current.children[3].style.display = 'flex'
                         c.current.children[4].style.display = 'flex'
                 }
-        } ,[per])
+        }, [per])
         for (let i = 0; i < r; i++) {
                 pages2.push('test')
                 setPages(...pages2)

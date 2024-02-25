@@ -3,17 +3,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import useStore from './../../catalog/zustand/store'
 import Image from 'next/image'
 import Cartright from './cartright'
+import { select } from '@nextui-org/react'
 export default function cart2() {
-        const {updateUser8} = useStore();
+        const { updateUser8 } = useStore();
         let x = useRef()
-        let datas2 = JSON.parse(localStorage.getItem('myProducts2'));
-        useEffect(() => {
-                if (datas2 == '') {
-                        x.current.innerText = 'Your Shopping Cart is Empty'
-                        x.current.style.fontSize = '45px'
-                        x.current.style.color = 'black'
-                }
-        }, [x, datas2])
+        if (typeof window !== 'undefined') {
+                let datas2 = JSON.parse(localStorage.getItem('myProducts2'));
+                useEffect(() => {
+                        if (datas2 == '') {
+                                x.current.innerText = 'Your Shopping Cart is Empty'
+                                x.current.style.fontSize = '45px'
+                                x.current.style.color = 'black'
+                        }
+                }, [x, datas2])
+        }
         return (
                 <section ref={x} className='w-full pt-[120px] px-10 lg:pl-10 lg:pr-5 flex flex-wrap lg:flex-nowrap  justify-center pb-10'>
                         <Left />
@@ -25,28 +28,32 @@ function Left() {
         const selecrto = useStore((state) => state.selectIt)
         const iddd = useStore((state) => state.idd)
         const selectt = useStore((state) => state.selectIt)
-        // const me = useStore((state) => state.selectIt2)
-        const selectop = JSON.parse(localStorage.getItem('myProducts2'));
-        // let sum =0
-        // for (let i = 0; i < selectop.length; i++) {
-        //         let t = Number(selectop[i].price)
-        //         sum = sum + t
-        // }
-        // console.log(sum);
+
         function clos(e) {
                 e.target.parentElement.parentElement.style.display = 'none'
                 let del = e.target.parentElement.parentElement.getAttribute('data-del')
-                let datas = JSON.parse(localStorage.getItem('myProducts2'));
-                datas.map((val, i) => {
-                        if (val.id == del) {
-                                datas.splice(i, 1)
-                        }
-                        localStorage.setItem('myProducts2', JSON.stringify(datas))
-                })
+                if (typeof window !== 'undefined') {
+                        let datas = JSON.parse(localStorage.getItem('myProducts2'));
+                        datas.map((val, i) => {
+                                if (val.id == del) {
+                                        datas.splice(i, 1)
+                                }
+                                localStorage.setItem('myProducts2', JSON.stringify(datas))
+                        })
+                }
         }
+        const [isClient, setIsClient] = useState(false)
+        useEffect(() => {
+                setIsClient(true)
+        }, [])
+        let selectop = []
+        if (typeof window !== 'undefined') {
+                selectop = JSON.parse(localStorage.getItem('myProducts2'));
+        }
+        // return <h1>{isClient ? 'This is never prerendered' : 'Prerendered'}</h1>
         return (
-                <div className='w-full lg:w-[65%]'>
-                        {
+                <section className='w-full lg:w-[65%]'>
+                        {isClient ?
                                 selectop && selectop.map((val, i) => {
                                         return (
                                                 <div data-del={val.id} className='w-full  flex flex-wrap items-center my-4 bg-white shadow-ui'>
@@ -79,9 +86,14 @@ function Left() {
                                                         </div>
                                                 </div>
                                         )
-                                })
+                                }) : 'Prerendered'
                         }
 
-                </div>
+                </section>
         )
+        // }
+
+
+
+
 }
